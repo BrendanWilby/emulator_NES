@@ -35,6 +35,8 @@ add_executable(NESEmulator
     src/emulator.cpp
     src/nes.cpp
     src/input.cpp
+    src/bus.cpp
+    src/cpu.cpp
 )
 
 target_link_libraries(NESEmulator

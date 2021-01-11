@@ -3,6 +3,9 @@
 #include "screen.h"
 #include "nes.h"
 #include "input.h"
+#include "nes.h"
+#include "cpu.h"
+#include "bus.h"
 
 class Emulator{
     private:

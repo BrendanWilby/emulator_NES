@@ -1,10 +1,15 @@
 #pragma once
 
+class CPU;
+class Bus;
+
 class NES{
+    private:
+        std::unique_ptr<Bus> _bus;
+        std::unique_ptr<CPU> _cpu;
     public:
-        NES(){}
+        NES();
 
         void Start();
-        void ExecuteCycle();
-        void Destroy();
+        void Update();
 };
