@@ -1,6 +1,8 @@
+#pragma once
+
 class Input{
     public:
         Input(){}
 
-        bool HandleInput();
+        void HandleInput();
 };

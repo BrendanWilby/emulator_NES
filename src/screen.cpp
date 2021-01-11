@@ -1,4 +1,5 @@
 #include "screen.h"
+#include "emulator.h"
 
 bool Screen::Init(){
     if(SDL_Init(SDL_INIT_VIDEO) != 0){
@@ -66,6 +67,26 @@ void Screen::BeginRender(){
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame(_sdlWindow);
     ImGui::NewFrame();
+
+    ImGui::BeginMainMenuBar();
+
+    if(ImGui::BeginMenu("File")){
+        if(ImGui::MenuItem("Open")){
+            std::cout << "ROM opening not implemented" << std::endl;
+        }
+
+        if(ImGui::MenuItem("Exit")){
+            Emulator::Exit();
+        }
+
+        ImGui::EndMenu();
+    }
+
+    if(ImGui::MenuItem("About")){
+        std::cout << "About menu not implemented" << std::endl;
+    }
+
+    ImGui::EndMainMenuBar();
 
 }
 

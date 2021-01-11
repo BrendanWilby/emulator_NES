@@ -1,5 +1,7 @@
 #include "emulator.h"
 
+bool Emulator::_isRunning = false;
+
 Emulator::Emulator(){
     _isRunning = false;
     _screen = std::make_unique<Screen>();
@@ -24,7 +26,7 @@ void Emulator::Run(){
     while(_isRunning){
         Uint64 start = SDL_GetPerformanceCounter();
 
-        _isRunning = _input->HandleInput();
+        _input->HandleInput();
         _screen->BeginRender();
 
         // Rendering here
@@ -48,4 +50,8 @@ void Emulator::Quit(){
     _screen->Destroy();
     _nes->Destroy();
     std::cout << "Quit Successfully" << std::endl;
+}
+
+void Emulator::Exit(){
+    _isRunning = false;
 }

@@ -1,14 +1,14 @@
 #include "input.h"
+#include "emulator.h"
 
-bool Input::HandleInput(){
+void Input::HandleInput(){
     SDL_Event sdlEvent;
 
     while(SDL_PollEvent(&sdlEvent) != 0){
         ImGui_ImplSDL2_ProcessEvent(&sdlEvent);
 
         if(sdlEvent.type == SDL_QUIT){
-            return false;
+            Emulator::Exit();
         }
     }
-    return true;
 }

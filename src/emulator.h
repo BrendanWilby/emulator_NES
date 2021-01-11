@@ -1,11 +1,12 @@
 #pragma once
+
 #include "screen.h"
 #include "nes.h"
 #include "input.h"
 
 class Emulator{
     private:
-        bool _isRunning;
+        static bool _isRunning;
 
         std::unique_ptr<Screen> _screen;
         std::unique_ptr<Input> _input;
@@ -17,4 +18,6 @@ class Emulator{
         void Start();
         void Run();
         void Quit();
+
+        static void Exit();
 };
