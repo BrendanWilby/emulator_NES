@@ -8,3 +8,6 @@ This is a rewrite of my existing WIP emulator to use ImGUI and simplify the code
 - SDL2
 - OpenGL
 - ImGUI
+
+# Resources
+- [Fix for input not working](https://github.com/ocornut/imgui/issues/2729)

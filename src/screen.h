@@ -5,6 +5,7 @@ constexpr auto WINDOW_TITLE = "NES Emulator";
 class Screen{
     private:
         SDL_Window* _sdlWindow;
+        SDL_GLContext _sdlContext;
     public:
         Screen() : _sdlWindow(nullptr) {}
 

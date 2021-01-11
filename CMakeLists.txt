@@ -18,6 +18,7 @@ add_library(imgui
     src/imgui/imgui_widgets.cpp
     src/imgui/imgui.cpp
     src/imgui/imgui_tables.cpp
+    src/imgui/imgui_demo.cpp
 )
 
 # Make SDL2 available to Imgui
@@ -25,7 +26,7 @@ target_include_directories(imgui PUBLIC ${SDL2_INCLUDE_DIRS})
 # imgui/backends/ contains the SDL implementation
 target_include_directories(imgui PUBLIC src/imgui/)
 
-add_library(glad "lib/glad/src/glad.c")
+add_library("glad" "lib/glad/src/glad.c")
 include_directories("lib/glad/include")
 
 add_executable(NESEmulator
@@ -36,6 +37,14 @@ add_executable(NESEmulator
     src/input.cpp
 )
 
+target_link_libraries(NESEmulator
+    "glad"
+    ${OPENGL_gl_LIBRARY}
+    ${SDL2_LIBRARIES}
+    imgui
+    ${CMAKE_DL_LIBS}
+)
+
 target_precompile_headers(NESEmulator PRIVATE 
     <iostream>
     <memory>
@@ -44,14 +53,6 @@ target_precompile_headers(NESEmulator PRIVATE
     [["imgui.h"]]
     [["imgui_impl_sdl.h"]]
     [["imgui_impl_opengl3.h"]]
-)
-
-target_link_libraries(NESEmulator
-    ${OPENGL_gl_LIBRARY}
-    ${SDL2_LIBRARIES}
-    imgui
-    glad
-    ${CMAKE_DL_LIBS}
 )
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
