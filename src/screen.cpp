@@ -89,15 +89,15 @@ void Screen::DrawMainMenu(){
         ImGui::EndMenu();
     }
 
-    if(ImGui::MenuItem("About"))
-        _showAboutMenu = !_showAboutMenu;
-
     if(ImGui::MenuItem("Start")){
         Emulator::GetNES()->Start();
     }
 
     if(ImGui::MenuItem("Pause/Unpause"))
         Emulator::GetNES()->Pause();
+
+    if(ImGui::MenuItem("About"))
+        _showAboutMenu = !_showAboutMenu;
 
     ImGui::EndMainMenuBar();
 }
