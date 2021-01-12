@@ -8,6 +8,7 @@ class NES{
         std::unique_ptr<Bus> _bus;
         std::unique_ptr<CPU> _cpu;
         bool _paused;
+        bool _running;
     public:
         NES();
 

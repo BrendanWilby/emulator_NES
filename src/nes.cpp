@@ -10,6 +10,7 @@ NES::NES(){
     _bus->ConnectCPU(*_cpu);
     _cpu->ConnectToBus(*_bus);
     _paused = true;
+    _running = false;
 }
 
 void NES::Start(){
@@ -22,15 +23,18 @@ void NES::Start(){
     _cpu->Reset();
 
     _paused = false;
+    _running = true;
 }
 
 void NES::Pause(){
-    _paused = !_paused;
+    if(_running){
+        _paused = !_paused;
 
-    if(_paused)
-        Debugger::LogMessage("Paused");
-    else
-        Debugger::LogMessage("Unpaused");
+        if(_paused)
+            Debugger::LogMessage("Paused");
+        else
+            Debugger::LogMessage("Unpaused");
+    }
 }
 
 void NES::Update(){
