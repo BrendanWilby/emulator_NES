@@ -96,6 +96,9 @@ void Screen::DrawMainMenu(){
     if(ImGui::MenuItem("Pause/Unpause"))
         Emulator::GetNES()->Pause();
 
+    if(ImGui::MenuItem("Advance"))
+        Emulator::GetNES()->Step();
+
     if(ImGui::MenuItem("About"))
         _showAboutMenu = !_showAboutMenu;
 
