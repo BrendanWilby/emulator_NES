@@ -82,8 +82,18 @@ void Screen::BeginRender(){
         ImGui::EndMenu();
     }
 
-    if(ImGui::MenuItem("About")){
-        std::cout << "About menu not implemented" << std::endl;
+    if(ImGui::MenuItem("About"))
+        _showAboutMenu = !_showAboutMenu;
+
+    if(_showAboutMenu){
+        ImGui::SetNextWindowPos(ImVec2(WINDOW_WIDTH / 2 - 200, WINDOW_HEIGHT / 2 - 40));
+        ImGui::SetNextWindowSize(ImVec2(400, 80));
+
+        ImGui::Begin("About");
+
+        ImGui::Text("A NES emulator written in C++ using SDL2 and ImGui.\n\nWritten by Brendan Wilby");
+
+        ImGui::End();
     }
 
     ImGui::EndMainMenuBar();
