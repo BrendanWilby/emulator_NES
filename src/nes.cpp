@@ -1,6 +1,7 @@
 #include "nes.h"
 #include "cpu.h"
 #include "bus.h"
+#include "debugger.h"
 
 NES::NES(){
     _bus = std::make_unique<Bus>();
@@ -8,18 +9,32 @@ NES::NES(){
 
     _bus->ConnectCPU(*_cpu);
     _cpu->ConnectToBus(*_bus);
+    _paused = true;
 }
 
 void NES::Start(){
-    std::cout << "Starting boot sequence..." << std::endl;
+    Debugger::LogMessage("Starting boot sequence...");
 
-    std::cout << "Resetting bus" << std::endl;
+    Debugger::LogMessage("Resetting bus...");
     _bus->Reset();
 
-    std::cout << "Resetting CPU" << std::endl;
+    Debugger::LogMessage("Resetting CPU...");
     _cpu->Reset();
+
+    _paused = false;
+}
+
+void NES::Pause(){
+    _paused = !_paused;
+
+    if(_paused)
+        Debugger::LogMessage("Paused");
+    else
+        Debugger::LogMessage("Unpaused");
 }
 
 void NES::Update(){
-    uint8_t cycles = _cpu->Execute();
+    if(_paused == false){
+        uint8_t cycles = _cpu->Execute();
+    }
 }

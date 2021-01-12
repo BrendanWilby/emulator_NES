@@ -79,7 +79,7 @@ void Screen::DrawMainMenu(){
 
     if(ImGui::BeginMenu("File")){
         if(ImGui::MenuItem("Open")){
-            std::cout << "ROM opening not implemented" << std::endl;
+            Debugger::LogError("ROM loading not yet implemented");
         }
 
         if(ImGui::MenuItem("Exit")){
@@ -92,11 +92,18 @@ void Screen::DrawMainMenu(){
     if(ImGui::MenuItem("About"))
         _showAboutMenu = !_showAboutMenu;
 
+    if(ImGui::MenuItem("Start")){
+        Emulator::GetNES()->Start();
+    }
+
+    if(ImGui::MenuItem("Pause/Unpause"))
+        Emulator::GetNES()->Pause();
+
     ImGui::EndMainMenuBar();
 }
 
 void Screen::DrawAboutMenu(){
-     ImGui::SetNextWindowPos(ImVec2(WINDOW_WIDTH / 2 - 200, WINDOW_HEIGHT / 2 - 40));
+    ImGui::SetNextWindowPos(ImVec2(WINDOW_WIDTH / 2 - 200, WINDOW_HEIGHT / 2 - 40));
     ImGui::SetNextWindowSize(ImVec2(400, 80));
 
     ImGui::Begin("About");

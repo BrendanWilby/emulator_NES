@@ -14,7 +14,7 @@ class Emulator{
 
         std::unique_ptr<Screen> _screen;
         std::unique_ptr<Input> _input;
-        std::unique_ptr<NES> _nes;
+        static std::unique_ptr<NES> _nes;
         std::unique_ptr<Debugger> _debugger;
         
     public:
@@ -22,7 +22,9 @@ class Emulator{
         
         void Start();
         void Run();
-        void Quit();
+        void OnQuit();
 
         static void Exit();
+
+        static NES* GetNES(){ return _nes.get(); }
 };

@@ -51,6 +51,7 @@ target_link_libraries(NESEmulator
 target_precompile_headers(NESEmulator PRIVATE 
     <iostream>
     <memory>
+    <vector>
     [["glad/glad.h"]]
     [["SDL2/SDL.h"]]
     [["imgui.h"]]

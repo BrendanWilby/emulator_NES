@@ -1,12 +1,12 @@
 #include "emulator.h"
 
 bool Emulator::_isRunning = false;
+std::unique_ptr<NES> Emulator::_nes = std::make_unique<NES>();
 
 Emulator::Emulator(){
     _isRunning = false;
     _screen = std::make_unique<Screen>();
     _input = std::make_unique<Input>();
-    _nes = std::make_unique<NES>();
     _debugger = std::make_unique<Debugger>();
 
     if(_screen->Init() == false){
@@ -16,8 +16,6 @@ Emulator::Emulator(){
 }
 
 void Emulator::Start(){
-    _nes->Start();
-
     Run();
 }
 
@@ -47,10 +45,10 @@ void Emulator::Run(){
             SDL_Delay((1000.0f / 60.0f) - elapsed);
     }
 
-    Quit();
+    OnQuit();
 }
 
-void Emulator::Quit(){
+void Emulator::OnQuit(){
     _screen->Destroy();
     std::cout << "Quit Successfully" << std::endl;
 }

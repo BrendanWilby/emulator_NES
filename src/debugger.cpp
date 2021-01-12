@@ -2,6 +2,7 @@
 #include "screen.h"
 
 DebugCPUInfo Debugger::_cpuInfo;
+std::vector<ConsoleEntry> Debugger::_messages;
 
 void Debugger::Render(){
     DrawViewMemory();
@@ -35,7 +36,13 @@ void Debugger::DrawViewCPU(){
     ImGui::Separator();
     ImGui::Text("Flags");
     ImGui::Separator();
-
+    ImGui::Text("C: %d", (_cpuInfo.flags & (1 << 0)) != 0);
+    ImGui::Text("Z: %d", (_cpuInfo.flags & (1 << 1)) != 0);
+    ImGui::Text("I: %d", (_cpuInfo.flags & (1 << 2)) != 0);
+    ImGui::Text("D: %d", (_cpuInfo.flags & (1 << 3)) != 0);
+    ImGui::Text("B: %d", (_cpuInfo.flags & (1 << 4)) != 0);
+    ImGui::Text("V: %d", (_cpuInfo.flags & (1 << 6)) != 0);
+    ImGui::Text("N: %d", (_cpuInfo.flags & (1 << 7)) != 0);
 
     ImGui::End();
 }
@@ -44,7 +51,23 @@ void Debugger::DrawViewConsole(){
     ImGui::SetNextWindowSize(ImVec2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2));
     ImGui::SetNextWindowPos(ImVec2(SCREEN_START_X + SCREEN_WIDTH / 2, SCREEN_START_Y + SCREEN_HEIGHT / 2));
     ImGui::Begin("Console View");
-    ImGui::Text("Console info");
+    
+    for(ConsoleEntry& msg : _messages){
+        switch(msg.messageType){
+            case ConsoleEntryType::CET_STANDARD:
+                ImGui::Text(msg.message.c_str());
+            break;
+
+            case ConsoleEntryType::CET_WARNING:
+                ImGui::TextColored(ImVec4(1.0f, 1.0f, 0, 1.0f), "[Warning]: %s", msg.message.c_str());
+            break;
+
+            case ConsoleEntryType::CET_ERROR:
+                ImGui::TextColored(ImVec4(1.0f, 0, 0, 1.0f), "[Error]: %s", msg.message.c_str());
+            break;
+        }
+    }
+
     ImGui::End();
 }
 
@@ -55,4 +78,22 @@ void Debugger::SetCPUInfo(uint16_t pc, uint16_t sp, uint8_t regA, uint8_t regX, 
     _cpuInfo.regX = regX;
     _cpuInfo.regY = regY;
     _cpuInfo.flags = flags;
+}
+
+void Debugger::LogMessage(std::string message){
+    PushEntry(message, ConsoleEntryType::CET_STANDARD);
+}
+
+void Debugger::LogWarning(std::string warning){
+    PushEntry(warning, ConsoleEntryType::CET_WARNING);
+}
+
+void Debugger::LogError(std::string error){
+    PushEntry(error, ConsoleEntryType::CET_ERROR);
+}
+
+void Debugger::PushEntry(std::string message, ConsoleEntryType msgType){
+    std::cout << message << std::endl;
+    ConsoleEntry entry = { message, msgType };
+    _messages.push_back(entry);
 }
