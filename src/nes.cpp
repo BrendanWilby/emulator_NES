@@ -62,19 +62,19 @@ const char* NES::GetCurrentState(){
 
     switch(_currentState){
         case NESState::NES_STATE_PAUSED:
-            state = "paused";
+            state = "Paused";
         break;
 
         case NESState::NES_STATE_RUNNING:
-            state = "running";
+            state = "Running";
         break;
 
         case NESState::NES_STATE_STEPPING:
-            state = "stepping";
+            state = "Stepping";
         break;
 
         case NESState::NES_STATE_STOPPED:
-            state = "stopped";
+            state = "Stopped";
         break;
     }
 

@@ -18,7 +18,10 @@ void Debugger::DrawViewMemory(){
     ImGui::Begin("Memory View");
 
     for(int i = 0; i < RAM_SIZE; i++){
-        ImGui::Text("%.2X", _nes->GetBus()->GetRAM()[i]);
+        if(i == _nes->GetCPU()->GetPC())
+            ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "%.2X", _nes->GetBus()->GetRAM()[i]);
+        else
+            ImGui::Text("%.2X", _nes->GetBus()->GetRAM()[i]);
 
         if(i % 16 < 15)
             ImGui::SameLine();
