@@ -5,6 +5,10 @@ uint8_t CPU::Execute() {
 	// Fetch opcode
 	uint8_t opCode = _bus->Read(_pc);
 
+	_lastPC = _pc;
+	_currentOpCode = opCode;
+	_currentOpMnemonic = _instructions[opCode].mnemonic;
+
 	// Decode and execute the instruction
 	(this->*(_instructions[opCode].execute))(opCode);
 

@@ -68,11 +68,18 @@ void Screen::BeginRender(){
     ImGui_ImplSDL2_NewFrame(_sdlWindow);
     ImGui::NewFrame();
 
+    DrawMainMenu();
+
+     if(_showAboutMenu)
+       DrawAboutMenu();
+}
+
+void Screen::DrawMainMenu(){
     ImGui::BeginMainMenuBar();
 
     if(ImGui::BeginMenu("File")){
         if(ImGui::MenuItem("Open")){
-            std::cout << "ROM opening not implemented" << std::endl;
+            Debugger::LogError("ROM loading not yet implemented");
         }
 
         if(ImGui::MenuItem("Exit")){
@@ -82,22 +89,31 @@ void Screen::BeginRender(){
         ImGui::EndMenu();
     }
 
+    if(ImGui::MenuItem("Start")){
+        Emulator::GetNES()->Start();
+    }
+
+    if(ImGui::MenuItem("Pause/Unpause"))
+        Emulator::GetNES()->Pause();
+
+    if(ImGui::MenuItem("Advance"))
+        Emulator::GetNES()->Step();
+
     if(ImGui::MenuItem("About"))
         _showAboutMenu = !_showAboutMenu;
 
-    if(_showAboutMenu){
-        ImGui::SetNextWindowPos(ImVec2(WINDOW_WIDTH / 2 - 200, WINDOW_HEIGHT / 2 - 40));
-        ImGui::SetNextWindowSize(ImVec2(400, 80));
-
-        ImGui::Begin("About");
-
-        ImGui::Text("A NES emulator written in C++ using SDL2 and ImGui.\n\nWritten by Brendan Wilby");
-
-        ImGui::End();
-    }
-
     ImGui::EndMainMenuBar();
+}
 
+void Screen::DrawAboutMenu(){
+    ImGui::SetNextWindowPos(ImVec2(WINDOW_WIDTH / 2 - 200, WINDOW_HEIGHT / 2 - 40));
+    ImGui::SetNextWindowSize(ImVec2(400, 80));
+
+    ImGui::Begin("About");
+
+    ImGui::Text("A NES emulator written in C++ using SDL2 and ImGui.\n\nWritten by Brendan Wilby");
+
+    ImGui::End();
 }
 
 void Screen::EndRender(){

@@ -2,8 +2,10 @@
 #include "cpu.h"
 
 void Bus::Reset(){
-    for(int i = 0; i < MEM_SIZE; i++)
-        Write(i, 0);
+    for(int i = 0; i < RAM_SIZE; i++)
+        _ram[i] = 0;
+	for(int i = 0; i < PRG_ROM_SIZE; i++)
+		_prgRom[i] = 0;
 }
 
 void Bus::ConnectCPU(CPU& cpu){
