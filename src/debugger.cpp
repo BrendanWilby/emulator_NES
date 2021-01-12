@@ -18,10 +18,16 @@ void Debugger::DrawViewMemory(){
     ImGui::Begin("Memory View");
 
     for(int i = 0; i < RAM_SIZE; i++){
-        if(i == _nes->GetCPU()->GetPC())
+        uint16_t currentPC = _nes->GetCPU()->GetPC();
+        uint16_t lastPC = _nes->GetCPU()->GetLastPC();
+
+        if(i == currentPC){
             ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "%.2X", _nes->GetBus()->GetRAM()[i]);
-        else
+        }else if(i == lastPC){
+            ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "%.2X", _nes->GetBus()->GetRAM()[i]);
+        }else{
             ImGui::Text("%.2X", _nes->GetBus()->GetRAM()[i]);
+        }
 
         if(i % 16 < 15)
             ImGui::SameLine();

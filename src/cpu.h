@@ -9,8 +9,8 @@ class Bus;
 
 class CPU {
     private:
-		uint8_t _lastOpCode;
-		const char* _lastOpMnemonic;
+		uint8_t _currentOpCode;
+		const char* _currentOpMnemonic;
 
         uint16_t _pc;
         uint8_t _sp;		// An offset from 0x0100, in the range 0x00 -> 0xFF
@@ -18,6 +18,8 @@ class CPU {
         uint8_t _regX;
         uint8_t _regY;
         uint8_t _flags;
+
+		uint16_t _lastPC;
 
         Bus* _bus;
         uint8_t _addCycles;	// Additional cycles to add
@@ -343,9 +345,10 @@ class CPU {
         void Reset();
         void ConnectToBus(Bus &bus);
 
-		uint8_t GetOpCode(){ return _lastOpCode; }
-		const char* GetOpMnemonic(){ return _lastOpMnemonic; }
+		uint8_t GetOpCode(){ return _currentOpCode; }
+		const char* GetOpMnemonic(){ return _currentOpMnemonic; }
 		uint16_t GetPC(){ return _pc; }
+		uint16_t GetLastPC(){ return _lastPC; }
 		uint8_t GetSP(){ return _sp; }
 		uint8_t GetRegA(){ return _regA; }
 		uint8_t GetRegX(){ return _regX; }

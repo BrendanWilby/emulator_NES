@@ -18,6 +18,7 @@ class Debugger {
     private:
         static std::vector<ConsoleEntry> _messages;
         NES* _nes;
+
     public:
         Debugger(NES& nes) :
             _nes(&nes)

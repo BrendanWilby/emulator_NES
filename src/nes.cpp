@@ -10,6 +10,9 @@ NES::NES(){
     _bus->ConnectCPU(*_cpu);
     _cpu->ConnectToBus(*_bus);
     _currentState = NESState::NES_STATE_STOPPED;
+    
+    _bus->Reset();
+    _cpu->Reset();
 }
 
 void NES::Start(bool autoStart){
