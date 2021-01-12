@@ -61,7 +61,7 @@ void Debugger::DrawViewConsole(){
     for(ConsoleEntry& msg : _messages){
         switch(msg.messageType){
             case ConsoleEntryType::CET_STANDARD:
-                ImGui::Text(msg.message.c_str());
+                ImGui::Text("[%.2d:%.2d:%.2d] %s", msg.time.tm_hour, msg.time.tm_min, msg.time.tm_sec, msg.message.c_str());
             break;
 
             case ConsoleEntryType::CET_WARNING:
@@ -101,7 +101,11 @@ void Debugger::LogError(std::string error){
 }
 
 void Debugger::PushEntry(std::string message, ConsoleEntryType msgType){
+    std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
+    time_t time = std::chrono::system_clock::to_time_t(now);
+    tm localTime = *localtime(&time);
+
     std::cout << message << std::endl;
-    ConsoleEntry entry = { message, msgType };
+    ConsoleEntry entry = { localTime, message, msgType };
     _messages.push_back(entry);
 }

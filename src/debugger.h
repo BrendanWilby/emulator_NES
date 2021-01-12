@@ -17,7 +17,8 @@ enum class ConsoleEntryType{
     CET_ERROR
 };
 
-struct ConsoleEntry{
+struct ConsoleEntry {
+    tm time;
     std::string message;
     ConsoleEntryType messageType;
 };
