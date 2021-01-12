@@ -1,15 +1,7 @@
 #pragma once
 
-struct DebugCPUInfo {
-    const char* mnemonic;
-    uint8_t opCode;
-    uint16_t pc;
-    uint16_t sp;
-    uint8_t regA;
-    uint8_t regX;
-    uint8_t regY;
-    uint8_t flags;
-};
+class Bus;
+class CPU;
 
 enum class ConsoleEntryType{
     CET_STANDARD,
@@ -25,19 +17,14 @@ struct ConsoleEntry {
 
 class Debugger {
     private:
-        static DebugCPUInfo _cpuInfo;
         static std::vector<ConsoleEntry> _messages;
+        CPU* _cpu;
+        Bus* _bus;
     public:
-        Debugger(){
-            _cpuInfo.mnemonic = "";
-            _cpuInfo.opCode = 0;
-            _cpuInfo.pc = 0;
-            _cpuInfo.sp = 0;
-            _cpuInfo.regA = 0;
-            _cpuInfo.regX = 0;
-            _cpuInfo.regY = 0;
-            _cpuInfo.flags = 0;
-        }
+        Debugger(CPU& cpu, Bus& bus) :
+            _cpu(&cpu),
+            _bus(&bus)
+        {}
 
         void Render();
 
@@ -45,7 +32,6 @@ class Debugger {
         void DrawViewCPU();
         void DrawViewConsole();
 
-        static void SetCPUInfo(uint8_t opCode, const char* mnemonic, uint16_t pc, uint16_t sp, uint8_t regA, uint8_t regX, uint8_t regY, uint8_t flags);
         static void LogMessage(std::string message);
         static void LogWarning(std::string warning);
         static void LogError(std::string error);

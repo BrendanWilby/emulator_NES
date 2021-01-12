@@ -45,4 +45,6 @@ class Bus {
 
         uint8_t Read(uint16_t address);
         uint16_t Read16(uint16_t address);
+
+        uint8_t *GetRAM(){ return _ram; }
 };

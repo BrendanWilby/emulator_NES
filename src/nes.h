@@ -15,4 +15,7 @@ class NES{
         void Start();
         void Pause();
         void Update();
+
+        CPU* GetCPU(){ return _cpu.get(); }
+        Bus* GetBus(){ return _bus.get(); }
 };

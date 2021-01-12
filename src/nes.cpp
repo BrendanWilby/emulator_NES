@@ -38,7 +38,7 @@ void NES::Pause(){
 }
 
 void NES::Update(){
-    if(_paused == false){
+    if(_running == true && _paused == false){
         uint8_t cycles = _cpu->Execute();
     }
 }

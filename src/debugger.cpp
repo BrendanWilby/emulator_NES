@@ -1,7 +1,8 @@
 #include "debugger.h"
 #include "screen.h"
+#include "bus.h"
+#include "cpu.h"
 
-DebugCPUInfo Debugger::_cpuInfo;
 std::vector<ConsoleEntry> Debugger::_messages;
 
 void Debugger::Render(){
@@ -14,7 +15,15 @@ void Debugger::DrawViewMemory(){
     ImGui::SetNextWindowSize(ImVec2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2));
     ImGui::SetNextWindowPos(ImVec2(SCREEN_START_X + SCREEN_WIDTH / 2, SCREEN_START_Y));
     ImGui::Begin("Memory View");
-    ImGui::Text("Memory info");
+
+    for(int i = 0; i < RAM_SIZE; i++){
+        ImGui::Text("%.2X", _bus->GetRAM()[i]);
+
+        if(i % 16 < 15)
+            ImGui::SameLine();
+    }
+
+    
     ImGui::End();
 }
 
@@ -23,16 +32,16 @@ void Debugger::DrawViewCPU(){
     ImGui::SetNextWindowPos(ImVec2(SCREEN_START_X, SCREEN_START_Y + SCREEN_HEIGHT / 2));
     ImGui::Begin("CPU View");
 
-    ImGui::Text("OP: 0x%.2X (%s)", _cpuInfo.opCode, _cpuInfo.mnemonic);
-    ImGui::Text("PC: 0x%.4X", _cpuInfo.pc);
-    ImGui::Text("SP: 0x%.4X", _cpuInfo.sp);
+    ImGui::Text("OP: 0x%.2X (%s)", _cpu->GetOpCode(), _cpu->GetOpMnemonic());
+    ImGui::Text("PC: 0x%.4X", _cpu->GetPC());
+    ImGui::Text("SP: 0x%.4X", _cpu->GetSP());
 
     ImGui::Separator();
     ImGui::Text("Registers");
     ImGui::Separator();
-    ImGui::Text("A: 0x%.2X", _cpuInfo.regA);
-    ImGui::Text("X: 0x%.2X", _cpuInfo.regX);
-    ImGui::Text("Y: 0x%.2X", _cpuInfo.regY);
+    ImGui::Text("A: 0x%.2X", _cpu->GetRegA());
+    ImGui::Text("X: 0x%.2X", _cpu->GetRegX());
+    ImGui::Text("Y: 0x%.2X", _cpu->GetRegY());
 
     ImGui::Separator();
     ImGui::Text("Flags");
@@ -40,14 +49,14 @@ void Debugger::DrawViewCPU(){
 
     ImGui::Text("C Z I D B   V N");
     ImGui::Text("%d %d %d %d %d %d %d %d",
-        (_cpuInfo.flags & (1 << 0)) != 0,
-        (_cpuInfo.flags & (1 << 1)) != 0,
-        (_cpuInfo.flags & (1 << 2)) != 0,
-        (_cpuInfo.flags & (1 << 3)) != 0,
-        (_cpuInfo.flags & (1 << 4)) != 0,
+        (_cpu->GetFlags() & (1 << 0)) != 0,
+        (_cpu->GetFlags() & (1 << 1)) != 0,
+        (_cpu->GetFlags() & (1 << 2)) != 0,
+        (_cpu->GetFlags() & (1 << 3)) != 0,
+        (_cpu->GetFlags() & (1 << 4)) != 0,
         0,
-        (_cpuInfo.flags & (1 << 6)) != 0,
-        (_cpuInfo.flags & (1 << 7)) != 0
+        (_cpu->GetFlags() & (1 << 6)) != 0,
+        (_cpu->GetFlags() & (1 << 7)) != 0
     );
 
     ImGui::End();
@@ -75,17 +84,6 @@ void Debugger::DrawViewConsole(){
     }
 
     ImGui::End();
-}
-
-void Debugger::SetCPUInfo(uint8_t opCode, const char* mnemonic, uint16_t pc, uint16_t sp, uint8_t regA, uint8_t regX, uint8_t regY, uint8_t flags){
-    _cpuInfo.opCode = opCode;
-    _cpuInfo.mnemonic = mnemonic;
-    _cpuInfo.pc = pc;
-    _cpuInfo.sp = sp;
-    _cpuInfo.regA = regA;
-    _cpuInfo.regX = regX;
-    _cpuInfo.regY = regY;
-    _cpuInfo.flags = flags;
 }
 
 void Debugger::LogMessage(std::string message){

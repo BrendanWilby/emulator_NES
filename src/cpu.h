@@ -9,6 +9,9 @@ class Bus;
 
 class CPU {
     private:
+		uint8_t _lastOpCode;
+		const char* _lastOpMnemonic;
+
         uint16_t _pc;
         uint8_t _sp;		// An offset from 0x0100, in the range 0x00 -> 0xFF
         uint8_t _regA;
@@ -339,6 +342,17 @@ class CPU {
         uint8_t Execute();
         void Reset();
         void ConnectToBus(Bus &bus);
+
+		uint8_t GetOpCode(){ return _lastOpCode; }
+		const char* GetOpMnemonic(){ return _lastOpMnemonic; }
+		uint16_t GetPC(){ return _pc; }
+		uint8_t GetSP(){ return _sp; }
+		uint8_t GetRegA(){ return _regA; }
+		uint8_t GetRegX(){ return _regX; }
+		uint8_t GetRegY(){ return _regY; }
+		uint8_t GetFlags(){ return _flags; }
+
+
 
     private:
         void SetFlag(Flags flag, FlagStatus status);
