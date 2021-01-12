@@ -1,9 +1,12 @@
 #include "cpu.h"
 #include "bus.h"
+#include "debugger.h"
 
 uint8_t CPU::Execute() {
 	// Fetch opcode
 	uint8_t opCode = _bus->Read(_pc);
+
+	Debugger::SetCPUInfo(_pc, _sp, _regA, _regX, _regY, _flags);
 
 	// Decode and execute the instruction
 	(this->*(_instructions[opCode].execute))(opCode);
