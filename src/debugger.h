@@ -1,7 +1,6 @@
 #pragma once
 
-class Bus;
-class CPU;
+class NES;
 
 enum class ConsoleEntryType{
     CET_STANDARD,
@@ -18,12 +17,10 @@ struct ConsoleEntry {
 class Debugger {
     private:
         static std::vector<ConsoleEntry> _messages;
-        CPU* _cpu;
-        Bus* _bus;
+        NES* _nes;
     public:
-        Debugger(CPU& cpu, Bus& bus) :
-            _cpu(&cpu),
-            _bus(&bus)
+        Debugger(NES& nes) :
+            _nes(&nes)
         {}
 
         void Render();

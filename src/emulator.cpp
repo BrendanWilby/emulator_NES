@@ -7,7 +7,7 @@ Emulator::Emulator(){
     _isRunning = false;
     _screen = std::make_unique<Screen>();
     _input = std::make_unique<Input>();
-    _debugger = std::make_unique<Debugger>(*_nes->GetCPU(), *_nes->GetBus());
+    _debugger = std::make_unique<Debugger>(*_nes);
 
     if(_screen->Init() == false){
         std::cerr << "Failed to initialize emulator" << std::endl;

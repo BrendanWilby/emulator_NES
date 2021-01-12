@@ -56,3 +56,27 @@ void NES::Step(){
 
     uint8_t cycles = _cpu->Execute();
 }
+
+const char* NES::GetCurrentState(){
+    const char* state = "";
+
+    switch(_currentState){
+        case NESState::NES_STATE_PAUSED:
+            state = "paused";
+        break;
+
+        case NESState::NES_STATE_RUNNING:
+            state = "running";
+        break;
+
+        case NESState::NES_STATE_STEPPING:
+            state = "stepping";
+        break;
+
+        case NESState::NES_STATE_STOPPED:
+            state = "stopped";
+        break;
+    }
+
+    return state;
+}

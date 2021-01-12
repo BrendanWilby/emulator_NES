@@ -26,4 +26,5 @@ class NES{
 
         CPU* GetCPU(){ return _cpu.get(); }
         Bus* GetBus(){ return _bus.get(); }
+        const char* GetCurrentState();
 };

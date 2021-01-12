@@ -2,6 +2,7 @@
 #include "screen.h"
 #include "bus.h"
 #include "cpu.h"
+#include "nes.h"
 
 std::vector<ConsoleEntry> Debugger::_messages;
 
@@ -17,13 +18,12 @@ void Debugger::DrawViewMemory(){
     ImGui::Begin("Memory View");
 
     for(int i = 0; i < RAM_SIZE; i++){
-        ImGui::Text("%.2X", _bus->GetRAM()[i]);
+        ImGui::Text("%.2X", _nes->GetBus()->GetRAM()[i]);
 
         if(i % 16 < 15)
             ImGui::SameLine();
     }
 
-    
     ImGui::End();
 }
 
@@ -32,16 +32,16 @@ void Debugger::DrawViewCPU(){
     ImGui::SetNextWindowPos(ImVec2(SCREEN_START_X, SCREEN_START_Y + SCREEN_HEIGHT / 2));
     ImGui::Begin("CPU View");
 
-    ImGui::Text("OP: 0x%.2X (%s)", _cpu->GetOpCode(), _cpu->GetOpMnemonic());
-    ImGui::Text("PC: 0x%.4X", _cpu->GetPC());
-    ImGui::Text("SP: 0x%.4X", _cpu->GetSP());
+    ImGui::Text("OP: 0x%.2X (%s)", _nes->GetCPU()->GetOpCode(), _nes->GetCPU()->GetOpMnemonic());
+    ImGui::Text("PC: 0x%.4X", _nes->GetCPU()->GetPC());
+    ImGui::Text("SP: 0x%.4X", _nes->GetCPU()->GetSP());
 
     ImGui::Separator();
     ImGui::Text("Registers");
     ImGui::Separator();
-    ImGui::Text("A: 0x%.2X", _cpu->GetRegA());
-    ImGui::Text("X: 0x%.2X", _cpu->GetRegX());
-    ImGui::Text("Y: 0x%.2X", _cpu->GetRegY());
+    ImGui::Text("A: 0x%.2X", _nes->GetCPU()->GetRegA());
+    ImGui::Text("X: 0x%.2X", _nes->GetCPU()->GetRegX());
+    ImGui::Text("Y: 0x%.2X", _nes->GetCPU()->GetRegY());
 
     ImGui::Separator();
     ImGui::Text("Flags");
@@ -49,15 +49,20 @@ void Debugger::DrawViewCPU(){
 
     ImGui::Text("C Z I D B   V N");
     ImGui::Text("%d %d %d %d %d %d %d %d",
-        (_cpu->GetFlags() & (1 << 0)) != 0,
-        (_cpu->GetFlags() & (1 << 1)) != 0,
-        (_cpu->GetFlags() & (1 << 2)) != 0,
-        (_cpu->GetFlags() & (1 << 3)) != 0,
-        (_cpu->GetFlags() & (1 << 4)) != 0,
+        (_nes->GetCPU()->GetFlags() & (1 << 0)) != 0,
+        (_nes->GetCPU()->GetFlags() & (1 << 1)) != 0,
+        (_nes->GetCPU()->GetFlags() & (1 << 2)) != 0,
+        (_nes->GetCPU()->GetFlags() & (1 << 3)) != 0,
+        (_nes->GetCPU()->GetFlags() & (1 << 4)) != 0,
         0,
-        (_cpu->GetFlags() & (1 << 6)) != 0,
-        (_cpu->GetFlags() & (1 << 7)) != 0
+        (_nes->GetCPU()->GetFlags() & (1 << 6)) != 0,
+        (_nes->GetCPU()->GetFlags() & (1 << 7)) != 0
     );
+
+    ImGui::Separator();
+    ImGui::Text("State");
+    ImGui::Separator();
+    ImGui::Text("%s", _nes->GetCurrentState());
 
     ImGui::End();
 }
