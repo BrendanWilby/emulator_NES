@@ -3,14 +3,14 @@
 class CPU;
 class Bus;
 
-enum class NESState{
+enum class NESState {
     NES_STATE_PAUSED,
     NES_STATE_STEPPING,
     NES_STATE_RUNNING,
     NES_STATE_STOPPED
 };
 
-class NES{
+class NES {
     private:
         std::unique_ptr<Bus> _bus;
         std::unique_ptr<CPU> _cpu;

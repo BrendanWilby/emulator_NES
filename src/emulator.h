@@ -8,7 +8,7 @@
 #include "bus.h"
 #include "debugger.h"
 
-class Emulator{
+class Emulator {
     private:
         static bool _isRunning;
 

@@ -25,7 +25,7 @@ constexpr auto RESET_VECTOR_HIGH = 0x80;
 
 class CPU;
 
-struct Cartridge{
+struct Cartridge {
     const char* path;
     uint16_t size;
 };

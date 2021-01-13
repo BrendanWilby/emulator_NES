@@ -2,7 +2,7 @@
 
 class NES;
 
-enum class ConsoleEntryType{
+enum class ConsoleEntryType {
     CET_STANDARD,
     CET_WARNING,
     CET_ERROR

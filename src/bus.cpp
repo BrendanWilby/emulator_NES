@@ -52,20 +52,20 @@ bool Bus::LoadCartridge(const char* path){
 	if(!romFile){
 		Debugger::LogError(std::string("Could not open file ") + std::string(path));
 		return false;
-	}else{
-		Debugger::LogMessage(std::string("Loaded rom file: ") + std::string(path));
 	}
-
+	
 	std::vector<unsigned char> romBuffer(std::istreambuf_iterator<char>(romFile), {});
 	auto romSize = romBuffer.size();
 
 	if (romSize > 0x4000)
-			romSize = 0x4000;
+		romSize = 0x4000;
 
 	for (int i = 16; i < romSize; i++) {
-			Write(PRG_ROM_BANK_0_START + i - 16, (uint8_t)romBuffer[i]);
-			Write(PRG_ROM_BANK_1_START + i - 16, (uint8_t)romBuffer[i]);
-		}
+		Write(PRG_ROM_BANK_0_START + i - 16, (uint8_t)romBuffer[i]);
+		Write(PRG_ROM_BANK_1_START + i - 16, (uint8_t)romBuffer[i]);
+	}
+
+	Debugger::LogMessage(std::string("Loaded rom file: ") + std::string(path));
 
 	if(_currentCartridge != nullptr){
 		_currentCartridge->path = path;
