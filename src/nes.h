@@ -18,7 +18,8 @@ class NES{
     public:
         NES();
 
-        void Start(bool autoStart = true);
+        void Start(const char* romPath);
+        void Restart();
         void Pause();
         void Update();
 

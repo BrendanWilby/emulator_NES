@@ -15,7 +15,12 @@ NES::NES(){
     _cpu->Reset();
 }
 
-void NES::Start(bool autoStart){
+void NES::Restart(){
+    if(_bus->IsCartridgeLoaded())
+        Start(_bus->GetCurrentCartPath());
+}
+
+void NES::Start(const char* romPath){
     Debugger::LogMessage("Starting boot sequence");
 
     Debugger::LogMessage("Resetting bus");
@@ -24,7 +29,11 @@ void NES::Start(bool autoStart){
     Debugger::LogMessage("Resetting CPU");
     _cpu->Reset();
 
-    if(autoStart)
+    // Load BIOS here at some point
+
+    _bus->LoadCartridge(romPath);
+
+    if(_currentState != NESState::NES_STATE_PAUSED)
         _currentState = NESState::NES_STATE_RUNNING;
 }
 
@@ -38,6 +47,9 @@ void NES::Pause(){
     }else if(_currentState == NESState::NES_STATE_STEPPING){
         _currentState = NESState::NES_STATE_RUNNING;
         Debugger::LogMessage("Continuing automatic execution");
+    }else if(_currentState == NESState::NES_STATE_STOPPED){
+        _currentState = NESState::NES_STATE_PAUSED;
+        Debugger::LogMessage("Paused on start");
     }
 }
 
@@ -48,11 +60,6 @@ void NES::Update(){
 }
 
 void NES::Step(){
-    if(_currentState == NESState::NES_STATE_STOPPED)
-        Start(false);
-    else if(_currentState == NESState::NES_STATE_RUNNING)
-        Pause();
-    
     _currentState = NESState::NES_STATE_STEPPING;
 
     Debugger::LogMessage("Stepping");

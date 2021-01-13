@@ -332,7 +332,7 @@ class CPU {
     
     public:
         CPU() : _pc(0),
-                _sp(0xFF),
+                _sp(0),
                 _regA(0),
                 _regX(0),
                 _regY(0),

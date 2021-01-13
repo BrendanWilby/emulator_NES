@@ -53,6 +53,9 @@ target_precompile_headers(NESEmulator PRIVATE
     <memory>
     <vector>
     <chrono>
+    <fstream>
+    <iterator>
+    <algorithm>
     [["glad/glad.h"]]
     [["SDL2/SDL.h"]]
     [["imgui.h"]]

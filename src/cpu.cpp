@@ -17,7 +17,10 @@ uint8_t CPU::Execute() {
 }
 
 void CPU::Reset() {
-	_pc = 0;
+	_pc = 0xC000;
+	_lastPC = 0xC000;
+	_currentOpCode = 0;
+	_currentOpMnemonic = "";
 	_sp = 0xFD;
 	_regA = 0;
 	_regX = 0;
