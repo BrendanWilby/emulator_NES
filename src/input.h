@@ -1,6 +1,6 @@
 #pragma once
 
-class Input{
+class Input {
     public:
         Input(){}
 

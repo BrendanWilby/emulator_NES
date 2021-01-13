@@ -15,23 +15,47 @@ void Debugger::Render(){
 void Debugger::DrawViewMemory(){
     ImGui::SetNextWindowSize(ImVec2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2));
     ImGui::SetNextWindowPos(ImVec2(SCREEN_START_X + SCREEN_WIDTH / 2, SCREEN_START_Y));
+
     ImGui::Begin("Memory View");
 
-    for(int i = 0; i < RAM_SIZE; i++){
-        uint16_t currentPC = _nes->GetCPU()->GetPC();
-        uint16_t lastPC = _nes->GetCPU()->GetLastPC();
+    uint16_t currentPC = _nes->GetCPU()->GetPC();
+    uint16_t lastPC = _nes->GetCPU()->GetLastPC();
 
-        if(i == currentPC){
-            ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "%.2X", _nes->GetBus()->GetRAM()[i]);
-        }else if(i == lastPC){
-            ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "%.2X", _nes->GetBus()->GetRAM()[i]);
-        }else{
-            ImGui::Text("%.2X", _nes->GetBus()->GetRAM()[i]);
+    ImGui::BeginTabBar("Memory Tab View");
+    if(ImGui::BeginTabItem("RAM")){
+        for(int i = 0; i < RAM_SIZE; i++){
+
+            if(i == currentPC){
+                ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "%.2X", _nes->GetBus()->GetRAM()[i]);
+            }else if(i == lastPC){
+                ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "%.2X", _nes->GetBus()->GetRAM()[i]);
+            }else{
+                ImGui::Text("%.2X", _nes->GetBus()->GetRAM()[i]);
+            }
+
+            if(i % 16 < 15)
+                ImGui::SameLine();
         }
-
-        if(i % 16 < 15)
-            ImGui::SameLine();
+        ImGui::EndTabItem();
     }
+
+    if(ImGui::BeginTabItem("ROM")){
+        for(int i = 0; i < PRG_ROM_SIZE; i++){
+            if(i + PRG_ROM_BANK_0_START == currentPC){
+                ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "%.2X", _nes->GetBus()->GetROM()[i]);
+            }else if(i + PRG_ROM_BANK_0_START == lastPC){
+                ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "%.2X", _nes->GetBus()->GetROM()[i]);
+            }else{
+                ImGui::Text("%.2X", _nes->GetBus()->GetROM()[i]);
+            }
+
+            if(i % 16 < 15)
+                ImGui::SameLine();
+        }
+        ImGui::EndTabItem();
+    }
+
+    ImGui::EndTabBar();
 
     ImGui::End();
 }
@@ -95,6 +119,8 @@ void Debugger::DrawViewConsole(){
                 ImGui::TextColored(ImVec4(1.0f, 0, 0, 1.0f), "[Error]: %s", msg.message.c_str());
             break;
         }
+
+        ImGui::SetScrollHere(1.0f);
     }
 
     ImGui::End();

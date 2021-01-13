@@ -1,11 +1,10 @@
 #include "bus.h"
 #include "cpu.h"
+#include "debugger.h"
 
 void Bus::Reset(){
-    for(int i = 0; i < RAM_SIZE; i++)
-        _ram[i] = 0;
-	for(int i = 0; i < PRG_ROM_SIZE; i++)
-		_prgRom[i] = 0;
+    for(int i = 0; i < MEM_SIZE; i++)
+        Write(i, 0);
 }
 
 void Bus::ConnectCPU(CPU& cpu){
@@ -44,4 +43,35 @@ uint8_t Bus::Read(uint16_t address){
 
 uint16_t Bus::Read16(uint16_t address){
     return (Read(address + 0x0001) << 8) | Read(address);
+}
+
+bool Bus::LoadCartridge(const char* path){
+	// Open file
+	std::ifstream romFile(path, std::ios::binary);
+
+	if(!romFile){
+		Debugger::LogError(std::string("Could not open file ") + std::string(path));
+		return false;
+	}
+	
+	std::vector<unsigned char> romBuffer(std::istreambuf_iterator<char>(romFile), {});
+	auto romSize = romBuffer.size();
+
+	if (romSize > 0x4000)
+		romSize = 0x4000;
+
+	for (int i = 16; i < romSize; i++) {
+		Write(PRG_ROM_BANK_0_START + i - 16, (uint8_t)romBuffer[i]);
+		Write(PRG_ROM_BANK_1_START + i - 16, (uint8_t)romBuffer[i]);
+	}
+
+	Debugger::LogMessage(std::string("Loaded rom file: ") + std::string(path));
+
+	if(_currentCartridge != nullptr){
+		_currentCartridge->path = path;
+		_currentCartridge->size = romSize;
+		_cartLoaded = true;
+	}
+
+	return true;
 }

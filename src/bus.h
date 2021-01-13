@@ -9,7 +9,7 @@ constexpr auto MEM_SIZE = 65536;
 constexpr auto PRG_ROM_SIZE = 32768;
 constexpr auto PRG_ROM_BANK_0_START = 0x8000;
 constexpr auto PRG_ROM_BANK_1_START = 0xC000;
-constexpr auto PRG_ROM_END = 0xFFF;
+constexpr auto PRG_ROM_END = 0xFFFF;
 
 // IO
 constexpr auto IO_PPU_START = 0x2000;
@@ -25,16 +25,25 @@ constexpr auto RESET_VECTOR_HIGH = 0x80;
 
 class CPU;
 
+struct Cartridge {
+    const char* path;
+    uint16_t size;
+};
+
 class Bus {
     private:
         uint8_t _ram[RAM_SIZE];
         uint8_t _prgRom[PRG_ROM_SIZE];
 
         CPU* _cpu;
+        std::unique_ptr<Cartridge> _currentCartridge;
+        bool _cartLoaded;
     public:
         Bus() :
             _ram(),
-            _prgRom()
+            _prgRom(),
+            _currentCartridge(std::make_unique<Cartridge>()),
+            _cartLoaded(false)
         {}
 
         void Reset();
@@ -43,8 +52,13 @@ class Bus {
 
         void Write(uint16_t address, uint8_t value);
 
+        bool LoadCartridge(const char* path);
+        bool IsCartridgeLoaded() { return _cartLoaded; };
+        const char* GetCurrentCartPath(){ return _currentCartridge->path; };
+
         uint8_t Read(uint16_t address);
         uint16_t Read16(uint16_t address);
 
         uint8_t *GetRAM(){ return _ram; }
+        uint8_t *GetROM(){ return _prgRom; }
 };
