@@ -11,3 +11,4 @@ This is a rewrite of my existing WIP emulator to use ImGUI and simplify the code
 
 # Resources
 - [Fix for input not working](https://github.com/ocornut/imgui/issues/2729)
+- [Wiki NesDev](https://wiki.nesdev.com/)
