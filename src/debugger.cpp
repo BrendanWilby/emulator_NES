@@ -18,16 +18,13 @@ void Debugger::DrawViewMemory(){
 
     ImGui::Begin("Memory View");
 
-    uint16_t currentPC = _nes->GetCPU()->GetPC();
-    uint16_t lastPC = _nes->GetCPU()->GetLastPC();
+    uint16_t currentPC = _nes->GetCPU()->GetInitPC();
 
     ImGui::BeginTabBar("Memory Tab View");
     if(ImGui::BeginTabItem("RAM")){
         for(int i = 0; i < RAM_SIZE; i++){
 
             if(i == currentPC){
-                ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "%.2X", _nes->GetBus()->GetRAM()[i]);
-            }else if(i == lastPC){
                 ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "%.2X", _nes->GetBus()->GetRAM()[i]);
             }else{
                 ImGui::Text("%.2X", _nes->GetBus()->GetRAM()[i]);
@@ -42,8 +39,6 @@ void Debugger::DrawViewMemory(){
     if(ImGui::BeginTabItem("ROM")){
         for(int i = 0; i < PRG_ROM_SIZE; i++){
             if(i + PRG_ROM_BANK_0_START == currentPC){
-                ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "%.2X", _nes->GetBus()->GetROM()[i]);
-            }else if(i + PRG_ROM_BANK_0_START == lastPC){
                 ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "%.2X", _nes->GetBus()->GetROM()[i]);
             }else{
                 ImGui::Text("%.2X", _nes->GetBus()->GetROM()[i]);
@@ -66,32 +61,27 @@ void Debugger::DrawViewCPU(){
     ImGui::Begin("CPU View");
 
     ImGui::Text("OP: 0x%.2X (%s)", _nes->GetCPU()->GetOpCode(), _nes->GetCPU()->GetOpMnemonic());
-    ImGui::Text("PC: 0x%.4X", _nes->GetCPU()->GetLastPC());
-    ImGui::Text("SP: 0x%.4X", _nes->GetCPU()->GetSP());
+    ImGui::Text("PC: 0x%.4X", _nes->GetCPU()->GetInitPC());
+    ImGui::Text("SP: 0x%.4X", _nes->GetCPU()->GetInitSP());
 
     ImGui::Separator();
     ImGui::Text("Registers");
     ImGui::Separator();
-    ImGui::Text("A: 0x%.2X", _nes->GetCPU()->GetRegA());
-    ImGui::Text("X: 0x%.2X", _nes->GetCPU()->GetRegX());
-    ImGui::Text("Y: 0x%.2X", _nes->GetCPU()->GetRegY());
+    ImGui::Text("A: 0x%.2X", _nes->GetCPU()->GetInitRegA());
+    ImGui::Text("X: 0x%.2X", _nes->GetCPU()->GetInitRegX());
+    ImGui::Text("Y: 0x%.2X", _nes->GetCPU()->GetInitRegY());
 
     ImGui::Separator();
     ImGui::Text("Flags");
     ImGui::Separator();
 
-    ImGui::Text("C Z I D B   V N");
-    ImGui::Text("%d %d %d %d %d %d %d %d = 0x%.2X",
-        _nes->GetCPU()->GetFlag(CPU::Flags::FLAG_C),
-        _nes->GetCPU()->GetFlag(CPU::Flags::FLAG_Z),
-        _nes->GetCPU()->GetFlag(CPU::Flags::FLAG_I),
-        _nes->GetCPU()->GetFlag(CPU::Flags::FLAG_D),
-        _nes->GetCPU()->GetFlag(CPU::Flags::FLAG_B),
-        (_nes->GetCPU()->GetFlags() & (1 << 5)) != 0,
-        _nes->GetCPU()->GetFlag(CPU::Flags::FLAG_V),
-        _nes->GetCPU()->GetFlag(CPU::Flags::FLAG_N),
-        _nes->GetCPU()->GetFlags()
-    );
+    ImGui::Text("C Z I D B    V N");
+
+    for(int i = 0; i < 8; i++){
+        ImGui::Text("%d", (_nes->GetCPU()->GetInitFlags() & (1 << i) != 0));
+        ImGui::SameLine();
+    }
+    ImGui::Text(" = 0x%.2X\n", _nes->GetCPU()->GetInitFlags());
 
     ImGui::Separator();
     ImGui::Text("State");

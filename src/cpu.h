@@ -19,8 +19,13 @@ class CPU {
         uint8_t _regY;
         uint8_t _flags;
 
-		uint16_t _lastPC;
-
+		uint16_t _initPC;
+		uint8_t _initSP;
+		uint8_t _initRegA;
+		uint8_t _initRegX;
+		uint8_t _initRegY;
+		uint8_t _initFlags;
+		
         Bus* _bus;
         uint8_t _addCycles;	// Additional cycles to add
 
@@ -327,7 +332,13 @@ class CPU {
                 _regX(0),
                 _regY(0),
                 _flags(0),
-                _addCycles(0)
+                _addCycles(0),
+				_initPC(0),
+				_initSP(0),
+				_initRegA(0),
+				_initRegX(0),
+				_initRegY(0),
+				_initFlags(0)
         {
         }
 
@@ -348,15 +359,16 @@ class CPU {
 		uint8_t GetOpCode(){ return _currentOpCode; }
 		const char* GetOpMnemonic(){ return _currentOpMnemonic; }
 		uint16_t GetPC(){ return _pc; }
-		uint16_t GetLastPC(){ return _lastPC; }
-		uint8_t GetSP(){ return _sp; }
-		uint8_t GetRegA(){ return _regA; }
-		uint8_t GetRegX(){ return _regX; }
-		uint8_t GetRegY(){ return _regY; }
-        FlagStatus GetFlag(Flags flag);
-		uint8_t GetFlags() { return _flags; }
+		uint16_t GetInitPC(){ return _initPC; }
+		uint8_t GetInitSP(){ return _initSP; }
+		uint8_t GetInitRegA(){ return _initRegA; }
+		uint8_t GetInitRegX(){ return _initRegX; }
+		uint8_t GetInitRegY(){ return _initRegY; }
+		uint8_t GetInitFlags() { return _initFlags; }
 
     private:
+        FlagStatus GetFlag(Flags flag);
+
         void SetFlag(Flags flag, FlagStatus status);
 
         void PushStack8(uint8_t value);

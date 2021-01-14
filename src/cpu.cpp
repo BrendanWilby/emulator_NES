@@ -5,7 +5,12 @@ uint8_t CPU::Execute() {
 	// Fetch opcode
 	uint8_t opCode = _bus->Read(_pc);
 
-	_lastPC = _pc;
+	_initPC = _pc;
+	_initSP = _sp;
+	_initRegA = _regA;
+	_initRegX = _regX;
+	_initRegY = _regY;
+	_initFlags = _flags;
 	_currentOpCode = opCode;
 	_currentOpMnemonic = _instructions[opCode].mnemonic;
 
@@ -18,7 +23,6 @@ uint8_t CPU::Execute() {
 
 void CPU::Reset() {
 	_pc = 0xC000;
-	_lastPC = 0xC000;
 	_currentOpCode = 0;
 	_currentOpMnemonic = "";
 	_sp = 0xFD;
@@ -152,8 +156,9 @@ uint16_t CPU::ReadAddrMode_IND_Y(bool checkPage) {
 
 uint16_t CPU::ReadAddrMode_REL(bool checkPage) {
 	int8_t offset = (int8_t)_bus->Read(_pc + 1);
-	_addCycles = 1;
 	uint16_t newPC = _pc + static_cast<uint16_t>(offset);
+
+	_addCycles = 1;
 
 	if (checkPage && CheckPageChange(_pc, newPC))
 		_addCycles = 3;
@@ -276,9 +281,9 @@ void CPU::PHP(uint8_t opCode) {
 void CPU::BPL(uint8_t opCode) {
 	if (GetFlag(Flags::FLAG_N) == FLAG_CLEAR) {
 		_pc = ReadAddrMode_REL(true);
-	}else {
-		_pc += 2;
 	}
+
+	_pc += 2;
 }
 
 void CPU::CLC(uint8_t opCode) {
@@ -394,10 +399,9 @@ void CPU::PLP(uint8_t opCode) {
 
 void CPU::BMI(uint8_t opCode) {
 	if (GetFlag(Flags::FLAG_N) == FLAG_SET) {
-		_pc += ReadAddrMode_REL(true);
-	}else {
-		_pc += 2;
+		_pc = ReadAddrMode_REL(true);
 	}
+	_pc += 2;
 }
 
 void CPU::SEC(uint8_t opCode) {
@@ -505,12 +509,10 @@ void CPU::JMP(uint8_t opCode) {
 }
 
 void CPU::BVC(uint8_t opCode) {
-	uint16_t offset = ReadAddrMode_REL(true);
-
 	if (GetFlag(Flags::FLAG_V) == FLAG_CLEAR)
-		_pc += offset;
-	else
-		_pc += 2;
+		_pc = ReadAddrMode_REL(true);
+	
+	_pc += 2;
 }
 
 void CPU::CLI(uint8_t opCode) {
@@ -618,12 +620,10 @@ void CPU::PLA(uint8_t opCode) {
 }
 
 void CPU::BVS(uint8_t opCode) {
-	uint16_t offset = ReadAddrMode_REL(true);
-
 	if (GetFlag(Flags::FLAG_V) == FLAG_SET)
-		_pc += offset;
-	else
-		_pc += 2;
+		_pc = ReadAddrMode_REL(true);;
+	
+	_pc += 2;
 }
 
 void CPU::SEI(uint8_t opCode) {
@@ -709,11 +709,10 @@ void CPU::TXA(uint8_t opCode) {
 }
 
 void CPU::BCC(uint8_t opCode) {
-	if (GetFlag(Flags::FLAG_C) == FLAG_CLEAR) {
-		_pc += ReadAddrMode_REL(true);
-	} else {
-		_pc += 2;
-	}
+	if (GetFlag(Flags::FLAG_C) == FLAG_CLEAR)
+		_pc = ReadAddrMode_REL(true);
+	
+	_pc += 2;
 }
 
 void CPU::TYA(uint8_t opCode) {
@@ -827,12 +826,10 @@ void CPU::TAX(uint8_t opCode) {
 }
 
 void CPU::BCS(uint8_t opCode) {
-	uint16_t offset = ReadAddrMode_REL(true);
-
 	if (GetFlag(Flags::FLAG_C) == FLAG_SET)
-		_pc += offset;
-	else
-		_pc += 2;
+		_pc = ReadAddrMode_REL(true);;
+	
+	_pc += 2;
 }
 
 void CPU::CLV(uint8_t opCode) {
@@ -1051,9 +1048,9 @@ void CPU::NOP(uint8_t opCode) {
 
 void CPU::BNE(uint8_t opCode) {
 	if (GetFlag(Flags::FLAG_Z) == FLAG_CLEAR)
-		_pc += ReadAddrMode_REL();
-	else
-		_pc += 2;
+		_pc = ReadAddrMode_REL();
+	
+	_pc += 2;
 }
 
 void CPU::CLD(uint8_t opCode) {
@@ -1063,9 +1060,9 @@ void CPU::CLD(uint8_t opCode) {
 
 void CPU::BEQ(uint8_t opCode) {
 	if (GetFlag(Flags::FLAG_Z) == FLAG_SET)
-		_pc += ReadAddrMode_REL(true);
-	else
-		_pc += 2;
+		_pc = ReadAddrMode_REL(true);
+	
+	_pc += 2;
 }
 
 void CPU::SED(uint8_t opCode) {
