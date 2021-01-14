@@ -64,6 +64,9 @@ bool Bus::LoadCartridge(const char* path){
 		Write(PRG_ROM_BANK_0_START + i - 16, (uint8_t)romBuffer[i]);
 		Write(PRG_ROM_BANK_1_START + i - 16, (uint8_t)romBuffer[i]);
 	}
+	for(int i = 0; i < 32; i++){
+		printf("0x%.2X\n", (uint8_t)romBuffer[i]);
+	}
 
 	Debugger::LogMessage(std::string("Loaded rom file: ") + std::string(path));
 

@@ -66,7 +66,7 @@ void Debugger::DrawViewCPU(){
     ImGui::Begin("CPU View");
 
     ImGui::Text("OP: 0x%.2X (%s)", _nes->GetCPU()->GetOpCode(), _nes->GetCPU()->GetOpMnemonic());
-    ImGui::Text("PC: 0x%.4X", _nes->GetCPU()->GetPC());
+    ImGui::Text("PC: 0x%.4X", _nes->GetCPU()->GetLastPC());
     ImGui::Text("SP: 0x%.4X", _nes->GetCPU()->GetSP());
 
     ImGui::Separator();
@@ -81,15 +81,16 @@ void Debugger::DrawViewCPU(){
     ImGui::Separator();
 
     ImGui::Text("C Z I D B   V N");
-    ImGui::Text("%d %d %d %d %d %d %d %d",
-        (_nes->GetCPU()->GetFlags() & (1 << 0)) != 0,
-        (_nes->GetCPU()->GetFlags() & (1 << 1)) != 0,
-        (_nes->GetCPU()->GetFlags() & (1 << 2)) != 0,
-        (_nes->GetCPU()->GetFlags() & (1 << 3)) != 0,
-        (_nes->GetCPU()->GetFlags() & (1 << 4)) != 0,
-        0,
-        (_nes->GetCPU()->GetFlags() & (1 << 6)) != 0,
-        (_nes->GetCPU()->GetFlags() & (1 << 7)) != 0
+    ImGui::Text("%d %d %d %d %d %d %d %d = 0x%.2X",
+        _nes->GetCPU()->GetFlag(CPU::Flags::FLAG_C),
+        _nes->GetCPU()->GetFlag(CPU::Flags::FLAG_Z),
+        _nes->GetCPU()->GetFlag(CPU::Flags::FLAG_I),
+        _nes->GetCPU()->GetFlag(CPU::Flags::FLAG_D),
+        _nes->GetCPU()->GetFlag(CPU::Flags::FLAG_B),
+        (_nes->GetCPU()->GetFlags() & (1 << 5)) != 0,
+        _nes->GetCPU()->GetFlag(CPU::Flags::FLAG_V),
+        _nes->GetCPU()->GetFlag(CPU::Flags::FLAG_N),
+        _nes->GetCPU()->GetFlags()
     );
 
     ImGui::Separator();

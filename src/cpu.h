@@ -30,16 +30,6 @@ class CPU {
 		void(CPU::* execute)(uint8_t);
 	};
 
-	enum class Flags {
-		FLAG_C = (1 << 0),
-		FLAG_Z = (1 << 1),
-		FLAG_I = (1 << 2),
-		FLAG_D = (1 << 3),
-		FLAG_B = (1 << 4),
-		FLAG_V = (1 << 6),
-		FLAG_N = (1 << 7)
-	};
-
 	const CPUInstructions _instructions[NUM_INSTRUCTIONS] = {
 		// 0x00
 		{ "BRK",		7, &CPU::BRK },
@@ -341,6 +331,16 @@ class CPU {
         {
         }
 
+		enum class Flags {
+			FLAG_C = (1 << 0),
+			FLAG_Z = (1 << 1),
+			FLAG_I = (1 << 2),
+			FLAG_D = (1 << 3),
+			FLAG_B = (1 << 4),
+			FLAG_V = (1 << 6),
+			FLAG_N = (1 << 7)
+		};
+
         uint8_t Execute();
         void Reset();
         void ConnectToBus(Bus &bus);
@@ -353,13 +353,11 @@ class CPU {
 		uint8_t GetRegA(){ return _regA; }
 		uint8_t GetRegX(){ return _regX; }
 		uint8_t GetRegY(){ return _regY; }
-		uint8_t GetFlags(){ return _flags; }
-
-
+        FlagStatus GetFlag(Flags flag);
+		uint8_t GetFlags() { return _flags; }
 
     private:
         void SetFlag(Flags flag, FlagStatus status);
-        FlagStatus GetFlag(Flags flag);
 
         void PushStack8(uint8_t value);
         void PushStack16(uint16_t value);
