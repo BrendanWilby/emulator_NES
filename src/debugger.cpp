@@ -78,7 +78,7 @@ void Debugger::DrawViewCPU(){
     ImGui::Text("C Z I D B    V N");
 
     for(int i = 0; i < 8; i++){
-        ImGui::Text("%d", (_nes->GetCPU()->GetInitFlags() & (1 << i) != 0));
+        ImGui::Text("%d", (_nes->GetCPU()->GetInitFlags() & (1 << i)) == 0 ? 0 : 1);
         ImGui::SameLine();
     }
     ImGui::Text(" = 0x%.2X\n", _nes->GetCPU()->GetInitFlags());
