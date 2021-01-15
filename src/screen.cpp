@@ -101,7 +101,7 @@ void Screen::DrawMainMenu(){
         Emulator::GetNES()->Pause();
 
     if(cartLoaded){
-        if(ImGui::MenuItem("Advance"))
+        if(ImGui::MenuItem("Step"))
             Emulator::GetNES()->Step();
     }
 
