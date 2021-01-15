@@ -29,7 +29,7 @@ void NES::Restart(){
         Start(_bus->GetCurrentCartPath());
 }
 
-void NES::Start(const char* romPath){
+void NES::Start(const char* romPath, bool isCartridge){
     Debugger::LogMessage("Starting boot sequence");
 
     Debugger::LogMessage("Resetting bus");
@@ -42,8 +42,10 @@ void NES::Start(const char* romPath){
     _ppu->Reset();
 
     // Load BIOS here at some point
-
-    _bus->LoadCartridge(romPath);
+    if(isCartridge)
+        _bus->LoadCartridge(romPath);
+    else
+        _bus->LoadROM(romPath);
 
     if(_currentState != NESState::NES_STATE_PAUSED)
         _currentState = NESState::NES_STATE_RUNNING;

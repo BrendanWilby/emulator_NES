@@ -29,17 +29,33 @@ class PPU;
 struct Cartridge {
     const char* path;
     uint16_t size;
+    bool useCustomInitParams;
+};
+
+enum class MirroringType {
+    MIRROR_HORIZONTAL,
+    MIRROR_VERTICAL,
+    MIRROR_FOUR
 };
 
 class Bus {
     private:
         uint8_t _ram[RAM_SIZE];
         uint8_t _prgRom[PRG_ROM_SIZE];
+        uint8_t _numRomBanks;
+        uint8_t _numVRomBanks;
+        uint8_t _numRamBanks;
+        uint8_t _mapperNumber;
+
+        bool _cartLoaded;
+        bool _hasBatteryPackedRAM;
+        bool _hasTrainer;
+
+        MirroringType _mirrorType;
 
         CPU* _cpu;
         PPU* _ppu;
         std::unique_ptr<Cartridge> _currentCartridge;
-        bool _cartLoaded;
     public:
         Bus() :
             _ram(),
@@ -55,6 +71,7 @@ class Bus {
 
         void Write(uint16_t address, uint8_t value);
 
+        bool LoadROM(const char* path);
         bool LoadCartridge(const char* path);
         bool IsCartridgeLoaded() { return _cartLoaded; };
         const char* GetCurrentCartPath(){ return _currentCartridge->path; };

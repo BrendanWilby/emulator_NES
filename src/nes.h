@@ -20,7 +20,7 @@ class NES {
     public:
         NES();
 
-        void Start(const char* romPath);
+        void Start(const char* romPath, bool isCartridge = false);
         void Restart();
         void Pause();
         void Update();
