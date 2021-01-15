@@ -5,6 +5,7 @@
 #include "input.h"
 #include "nes.h"
 #include "cpu.h"
+#include "ppu.h"
 #include "bus.h"
 #include "debugger.h"
 

@@ -1,6 +1,7 @@
 #pragma once
 
 class CPU;
+class PPU;
 class Bus;
 
 enum class NESState {
@@ -14,6 +15,7 @@ class NES {
     private:
         std::unique_ptr<Bus> _bus;
         std::unique_ptr<CPU> _cpu;
+        std::unique_ptr<PPU> _ppu;
         NESState _currentState;
     public:
         NES();
@@ -27,5 +29,6 @@ class NES {
 
         CPU* GetCPU(){ return _cpu.get(); }
         Bus* GetBus(){ return _bus.get(); }
+        PPU* GetPPU(){ return _ppu.get(); }
         const char* GetCurrentState();
 };
