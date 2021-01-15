@@ -1,5 +1,6 @@
 #include "bus.h"
 #include "cpu.h"
+#include "ppu.h"
 #include "debugger.h"
 
 void Bus::Reset(){
@@ -9,6 +10,10 @@ void Bus::Reset(){
 
 void Bus::ConnectCPU(CPU& cpu){
 	_cpu = &cpu;
+}
+
+void Bus::ConnectPPU(PPU& ppu){
+	_ppu = &ppu;
 }
 
 void Bus::Write(uint16_t address, uint8_t value){

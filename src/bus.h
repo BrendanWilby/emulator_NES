@@ -24,6 +24,7 @@ constexpr auto RESET_VECTOR_LOW = 0x00;
 constexpr auto RESET_VECTOR_HIGH = 0x80;
 
 class CPU;
+class PPU;
 
 struct Cartridge {
     const char* path;
@@ -36,6 +37,7 @@ class Bus {
         uint8_t _prgRom[PRG_ROM_SIZE];
 
         CPU* _cpu;
+        PPU* _ppu;
         std::unique_ptr<Cartridge> _currentCartridge;
         bool _cartLoaded;
     public:
@@ -49,6 +51,7 @@ class Bus {
         void Reset();
 
         void ConnectCPU(CPU& cpu);
+        void ConnectPPU(PPU& ppu);
 
         void Write(uint16_t address, uint8_t value);
 

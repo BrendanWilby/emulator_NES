@@ -1,18 +1,27 @@
 #include "nes.h"
 #include "cpu.h"
+#include "ppu.h"
 #include "bus.h"
 #include "debugger.h"
 
 NES::NES(){
     _bus = std::make_unique<Bus>();
     _cpu = std::make_unique<CPU>();
+    _ppu = std::make_unique<PPU>();
 
+    // Connect CPU to bus
     _bus->ConnectCPU(*_cpu);
     _cpu->ConnectToBus(*_bus);
+
+    // Connect PPU to bus
+    _bus->ConnectPPU(*_ppu);
+    _ppu->ConnectToBus(*_bus);
+
     _currentState = NESState::NES_STATE_STOPPED;
     
     _bus->Reset();
     _cpu->Reset();
+    _ppu->Reset();
 }
 
 void NES::Restart(){
@@ -28,6 +37,9 @@ void NES::Start(const char* romPath){
 
     Debugger::LogMessage("Resetting CPU");
     _cpu->Reset();
+
+    Debugger::LogMessage("Resetting PPU");
+    _ppu->Reset();
 
     // Load BIOS here at some point
 
