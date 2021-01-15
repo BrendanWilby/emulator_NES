@@ -95,10 +95,6 @@ bool Bus::LoadROM(const char* path){
 		Write(PRG_ROM_BANK_1_START + i - 16, (uint8_t)romBuffer[i]);
 	}
 
-	for(int i = 0; i < 32; i++){
-		printf("0x%.2X\n", (uint8_t)romBuffer[i]);
-	}
-
 	_currentCartridge->path = path;
 	_currentCartridge->size = romSize;
 	_currentCartridge->useCustomInitParams = false;
