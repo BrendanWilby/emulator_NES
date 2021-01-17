@@ -95,23 +95,12 @@ bool Bus::LoadROM(const char* path){
 		Write(PRG_ROM_BANK_1_START + i - 16, (uint8_t)romBuffer[i]);
 	}
 
-	_currentCartridge->path = path;
+	_currentCartridge->romPath = path;
 	_currentCartridge->size = romSize;
-	_currentCartridge->useCustomInitParams = false;
 
 	Debugger::LogMessage(std::string("Loaded rom file: ") + std::string(path));
 
 	_cartLoaded = true;
-
-	return true;
-}
-
-bool Bus::LoadCartridge(const char* path){
-	// Open cart file
-
-	// Read in rom path
-
-	// Load the ROM from that path
 
 	return true;
 }

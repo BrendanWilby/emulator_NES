@@ -27,7 +27,7 @@ class CPU;
 class PPU;
 
 struct Cartridge {
-    const char* path;
+    const char* romPath;
     uint16_t size;
     bool useCustomInitParams;
 };
@@ -72,9 +72,8 @@ class Bus {
         void Write(uint16_t address, uint8_t value);
 
         bool LoadROM(const char* path);
-        bool LoadCartridge(const char* path);
         bool IsCartridgeLoaded() { return _cartLoaded; };
-        const char* GetCurrentCartPath(){ return _currentCartridge->path; };
+        const char* GetCurrentCartPath(){ return _currentCartridge->romPath; };
 
         uint8_t Read(uint16_t address);
         uint16_t Read16(uint16_t address);
