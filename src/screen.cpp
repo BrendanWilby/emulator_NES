@@ -68,10 +68,19 @@ void Screen::BeginRender(){
     ImGui_ImplSDL2_NewFrame(_sdlWindow);
     ImGui::NewFrame();
 
+    DrawGameMenu();
     DrawMainMenu();
 
      if(_showAboutMenu)
        DrawAboutMenu();
+}
+
+void Screen::DrawGameMenu(){
+    ImGui::SetNextWindowPos(ImVec2(0, SCREEN_START_Y));
+    ImGui::SetNextWindowSize(ImVec2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2));
+    ImGui::Begin("Game View");
+
+    ImGui::End();
 }
 
 void Screen::DrawMainMenu(){

@@ -24,6 +24,7 @@ class Screen {
         void EndRender();
         void Destroy();
 
+        void DrawGameMenu();
         void DrawMainMenu();
         void DrawAboutMenu();
 
