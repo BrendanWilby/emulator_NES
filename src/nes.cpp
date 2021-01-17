@@ -40,11 +40,6 @@ void NES::Start(const char* romPath){
 
     Debugger::LogMessage("Resetting PPU");
     _ppu->Reset();
-<<<<<<< HEAD
-
-    // Load BIOS here at some point
-=======
->>>>>>> origin/master
 
     // Load BIOS here at some point
     _bus->LoadROM(romPath);
