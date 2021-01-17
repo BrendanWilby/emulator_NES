@@ -30,8 +30,7 @@ void Emulator::Run(){
         _nes->Update();
 
         _screen->BeginRender();
-
-        // Rendering here
+        
         _debugger->Render();
 
         _screen->EndRender();

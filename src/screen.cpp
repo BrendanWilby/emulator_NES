@@ -127,6 +127,7 @@ void Screen::DrawAboutMenu(){
 void Screen::EndRender(){
     ImGui::Render();
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+    glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     SDL_GL_SwapWindow(_sdlWindow);

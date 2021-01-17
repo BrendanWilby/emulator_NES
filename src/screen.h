@@ -26,4 +26,6 @@ class Screen {
 
         void DrawMainMenu();
         void DrawAboutMenu();
+
+        SDL_Window* GetSDLWindow(){ return _sdlWindow; }
 };

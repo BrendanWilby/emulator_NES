@@ -67,6 +67,7 @@ void NES::Pause(){
 void NES::Update(){
     if(_currentState == NESState::NES_STATE_RUNNING){
          uint8_t cycles = _cpu->Execute();
+
     }
 }
 
