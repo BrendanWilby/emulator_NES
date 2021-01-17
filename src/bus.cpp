@@ -1,5 +1,6 @@
 #include "bus.h"
 #include "cpu.h"
+#include "ppu.h"
 #include "debugger.h"
 
 void Bus::Reset(){
@@ -9,6 +10,10 @@ void Bus::Reset(){
 
 void Bus::ConnectCPU(CPU& cpu){
 	_cpu = &cpu;
+}
+
+void Bus::ConnectPPU(PPU& ppu){
+	_ppu = &ppu;
 }
 
 void Bus::Write(uint16_t address, uint8_t value){
@@ -45,7 +50,7 @@ uint16_t Bus::Read16(uint16_t address){
     return (Read(address + 0x0001) << 8) | Read(address);
 }
 
-bool Bus::LoadCartridge(const char* path){
+bool Bus::LoadROM(const char* path){
 	// Open file
 	std::ifstream romFile(path, std::ios::binary);
 
@@ -60,21 +65,42 @@ bool Bus::LoadCartridge(const char* path){
 	if (romSize > 0x4000)
 		romSize = 0x4000;
 
+	// Read first 3 bytes of .nes file
+	std::string fileType;
+	fileType.push_back(romBuffer[0]);
+	fileType.push_back(romBuffer[1]);
+	fileType.push_back(romBuffer[2]);
+
+	// Check if the first three bytes contain "NES" and the fourth byte contains 0x1A
+	if(fileType != "NES" || romBuffer[3] != 0x1A){
+		Debugger::LogError("File " + std::string(path) + " not recognised as a NES file.");
+		return false;
+	}
+
+	_numRomBanks = romBuffer[4];
+	_numVRomBanks = romBuffer[5];
+
+	_mirrorType = (romBuffer[6] & 0x01) == 0 ? MirroringType::MIRROR_HORIZONTAL : MirroringType::MIRROR_VERTICAL;
+	_hasBatteryPackedRAM = (romBuffer[6] & 0x02) >> 1;
+	_hasTrainer = (romBuffer[6] & 0x04) >> 2;
+
+	if(((romBuffer[6] & 0x08) >> 3) == 0x01)
+		_mirrorType = MirroringType::MIRROR_FOUR;
+
+	_mapperNumber = (romBuffer[7] & 0xF0) | (romBuffer[6] & 0xF0) >> 4;
+	_numRamBanks = romBuffer[8];
+
 	for (int i = 16; i < romSize; i++) {
 		Write(PRG_ROM_BANK_0_START + i - 16, (uint8_t)romBuffer[i]);
 		Write(PRG_ROM_BANK_1_START + i - 16, (uint8_t)romBuffer[i]);
 	}
-	for(int i = 0; i < 32; i++){
-		printf("0x%.2X\n", (uint8_t)romBuffer[i]);
-	}
+
+	_currentCartridge->romPath = path;
+	_currentCartridge->size = romSize;
 
 	Debugger::LogMessage(std::string("Loaded rom file: ") + std::string(path));
 
-	if(_currentCartridge != nullptr){
-		_currentCartridge->path = path;
-		_currentCartridge->size = romSize;
-		_cartLoaded = true;
-	}
+	_cartLoaded = true;
 
 	return true;
 }
