@@ -40,10 +40,14 @@ void NES::Start(const char* romPath){
 
     Debugger::LogMessage("Resetting PPU");
     _ppu->Reset();
+<<<<<<< HEAD
 
     // Load BIOS here at some point
+=======
+>>>>>>> origin/master
 
-    _bus->LoadCartridge(romPath);
+    // Load BIOS here at some point
+    _bus->LoadROM(romPath);
 
     if(_currentState != NESState::NES_STATE_PAUSED)
         _currentState = NESState::NES_STATE_RUNNING;

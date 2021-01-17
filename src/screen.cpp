@@ -78,8 +78,10 @@ void Screen::DrawMainMenu(){
     ImGui::BeginMainMenuBar();
 
     if(ImGui::BeginMenu("File")){
-        if(ImGui::MenuItem("Open")){
-            Emulator::GetNES()->Start("../roms/tests/nestest.nes");
+        if(ImGui::BeginMenu("Load ROM")){
+            if(ImGui::MenuItem("NES Test"))
+                Emulator::GetNES()->Start("../roms/tests/nestest.nes");
+            ImGui::EndMenu();
         }
 
         if(ImGui::MenuItem("Exit")){
