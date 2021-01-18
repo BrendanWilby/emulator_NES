@@ -9,7 +9,7 @@ Emulator::Emulator(){
     _input = std::make_unique<Input>();
     _debugger = std::make_unique<Debugger>(*_nes);
 
-    if(_screen->Init() == false){
+    if(_screen->Init(*this) == false){
         std::cerr << "Failed to initialize emulator" << std::endl;
         return;
     }
@@ -31,7 +31,8 @@ void Emulator::Run(){
 
         _screen->BeginRender();
         
-        _debugger->Render();
+        if(settings.ShowDebugView())
+            _debugger->Render();
 
         _screen->EndRender();
 

@@ -10,16 +10,23 @@ constexpr auto SCREEN_HEIGHT = 600 - MENU_MAIN_HEIGHT;
 constexpr auto SCREEN_START_X = 0;
 constexpr auto SCREEN_START_Y = MENU_MAIN_HEIGHT;
 
+class Emulator;
+
 class Screen {
     private:
         bool _showAboutMenu;
         
         SDL_Window* _sdlWindow;
         SDL_GLContext _sdlContext;
+        Emulator* _emulator;
     public:
-        Screen() : _sdlWindow(nullptr) {}
+        Screen() : 
+        _sdlWindow(nullptr),
+        _sdlContext(NULL),
+        _emulator(nullptr)
+        {}
 
-        bool Init();
+        bool Init(Emulator& emulator);
         void BeginRender();
         void EndRender();
         void Destroy();

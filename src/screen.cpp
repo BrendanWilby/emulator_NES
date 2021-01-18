@@ -1,7 +1,9 @@
 #include "screen.h"
 #include "emulator.h"
 
-bool Screen::Init(){
+bool Screen::Init(Emulator& emulator){
+    _emulator = &emulator;
+
     if(SDL_Init(SDL_INIT_VIDEO) != 0){
         std::cout << "Failed to initialize SDL. SDL Error: " << SDL_GetError() << std::endl;
         return false;
@@ -97,6 +99,19 @@ void Screen::DrawMainMenu(){
             Emulator::Exit();
         }
 
+        ImGui::EndMenu();
+    }
+
+    if(ImGui::BeginMenu("Settings")){
+        if(_emulator->settings.ShowDebugView()){
+            if(ImGui::MenuItem("Hide debug view")){
+                _emulator->settings.SetShowDebugView(false);
+            }
+        }else{
+            if(ImGui::MenuItem("Show debug view")){
+                _emulator->settings.SetShowDebugView(true);
+            }
+        }
         ImGui::EndMenu();
     }
 
